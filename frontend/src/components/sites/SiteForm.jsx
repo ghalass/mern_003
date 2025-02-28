@@ -5,40 +5,22 @@ import { BsKey, BsPerson, BsExclamationCircle } from "react-icons/bs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "react-hot-toast";
+import { useCrudStore } from "../../store/crudStore";
+import { LuPlus } from "react-icons/lu";
 
 const SiteForm = () => {
+  const selectedItem = useCrudStore((state) => state.selectedItem);
+  const setSelectedItem = useCrudStore((state) => state.setSelectedItem);
+  const setOp = useCrudStore((state) => state.setOp);
+  const op = useCrudStore((state) => state.op);
+
   const [name, setName] = useState("");
 
   const [error, setError] = useState(null);
 
-  // handle form submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!name) {
-      setError("Entrer le nom du site.");
-      return;
-    }
-
-    setError("");
-
-    // Login API Call
-    mutation.mutate({ name });
-  };
-
   const create = async (data) => {
-    try {
-      const response = await axiosInstance.post(API_PATHS.SITES.ADD_SITE, data);
-      if (response?.data?.message) {
-        toast.success(response?.data?.message);
-      }
-    } catch (err) {
-      if (err.response && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Une erreur s'est produite, veuillez réessayer.");
-      }
-    }
+    const response = await axiosInstance.post(API_PATHS.SITES.ADD_SITE, data);
+    if (response?.data?.message) toast.success(response?.data?.message);
   };
 
   // Mutations;
@@ -52,9 +34,33 @@ const SiteForm = () => {
     },
   });
 
+  // handle form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!name) {
+      setError("Entrer le nom du site.");
+      return;
+    }
+    setError("");
+    // Login API Call
+    mutation.mutate({ name });
+  };
+
   return (
     <div className="card-body">
-      <h6>Gestion d'un site</h6>
+      <div className="d-flex justify-content-between mb-1">
+        <h6>Gestion d'un site {op}</h6>
+
+        <button
+          onClick={() => {
+            setSelectedItem(null);
+            setOp("add");
+          }}
+          className="btn btn-sm btn-outline-success rounded-pill pb-1 pt-0 px-2"
+        >
+          <LuPlus />
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div className="form-floating mb-2">

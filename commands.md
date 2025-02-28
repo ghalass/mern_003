@@ -5,6 +5,7 @@
 - npm i bootstrap@5.3.3 react-icons axios moment react-router-dom react-hot-toast
 - npm install react-bootstrap bootstrap
 - npm i @tanstack/react-query
+- npm install zustand
 
 # backend
 

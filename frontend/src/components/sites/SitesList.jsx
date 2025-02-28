@@ -3,8 +3,12 @@ import { LuTrash2, LuPencil } from "react-icons/lu";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
+import { useCrudStore } from "../../store/crudStore";
 
 const SitesList = () => {
+  const setSelectedItem = useCrudStore((state) => state.setSelectedItem);
+  const setOp = useCrudStore((state) => state.setOp);
+
   const getAll = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.SITES.GET_ALL_SITES);
@@ -47,11 +51,24 @@ const SitesList = () => {
                 <td>{site.name}</td>
                 <td>
                   <div className="d-flex gap-1">
-                    <button className="btn btn-sm btn-outline-danger rounded-pill pb-1 pt-0 px-2">
-                      <LuTrash2 />
-                    </button>
-                    <button className="btn btn-sm btn-outline-success rounded-pill pb-1 pt-0 px-2">
+                    <button
+                      onClick={() => {
+                        setSelectedItem(site);
+                        setOp("update");
+                      }}
+                      className="btn btn-sm btn-outline-success rounded-pill pb-1 pt-0 px-2"
+                    >
                       <LuPencil />
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSelectedItem(site);
+                        setOp("delete");
+                      }}
+                      className="btn btn-sm btn-outline-danger rounded-pill pb-1 pt-0 px-2"
+                    >
+                      <LuTrash2 />
                     </button>
                   </div>
                 </td>

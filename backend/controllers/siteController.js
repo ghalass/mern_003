@@ -25,7 +25,7 @@ exports.addSite = async (req, res) => {
 
 exports.getAllSites = async (req, res) => {
     try {
-        const sites = await prisma.site.findMany()
+        const sites = await prisma.site.findMany({ orderBy: { createdAt: "desc" } })
         res.status(200).json({ message: "Enregistrements récupérés avec succès.", sites })
 
     } catch (err) {
