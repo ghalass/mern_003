@@ -13,12 +13,12 @@ const Sites = () => {
       <div className="container-lg">
         <AdminLayout />
 
-        <div className="d-flex gap-1">
-          <div className="mt-2 card col col-md-4">
+        <div className="row">
+          <div className="mt-2 col-sm-12 col-md-4 ">
             <SiteForm />
           </div>
 
-          <div className="mt-2 card col col-md-8">
+          <div className="mt-2 col-sm-12 col-md-8 ">
             <SitesList />
           </div>
         </div>

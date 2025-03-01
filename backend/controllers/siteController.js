@@ -97,21 +97,26 @@ exports.updateSite = async (req, res) => {
     }
 }
 
+// backend/controllers/siteController.js
 exports.downloadSitesExcel = async (req, res) => {
     try {
         const sites = await prisma.site.findMany();
-
-        // Prepare data for Excel
-        const data = sites?.map((item) => ({
-            Site: item.name
-        }))
+        const data = sites.map((item) => ({ Site: item.name }));
 
         const wb = xlsx.utils.book_new();
-        const ws = xlsx.utils.json_to_sheet(data)
+        const ws = xlsx.utils.json_to_sheet(data);
         xlsx.utils.book_append_sheet(wb, ws, "Sites");
-        xlsx.writeFile(wb, "sites_list.xlsx");
-        res.download('sites_list.xlsx');
+
+        const buffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
+
+        // Set headers before sending the response
+        res.setHeader("Content-Disposition", "attachment; filename=sites_list.xlsx");
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Length", buffer.length);
+
+        res.send(buffer);
     } catch (err) {
-        res.status(500).json({ message: "Server Error", error: err })
+        res.status(500).json({ message: "Server Error", error: err });
     }
-}
+};
+
