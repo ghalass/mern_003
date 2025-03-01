@@ -17,6 +17,13 @@ export const API_PATHS = {
         DELETE_SITE: (siteId) => `/sites/${siteId}`,
         DOWNLOAD_SITES: "/sites/downloadexcel",
     },
+    ENGINS: {
+        GET_ALL_ENGINS: "/engins/get",
+        ADD_ENGIN: "/engins/add",
+        UPDATE_ENGIN: (enginId) => `/engins/${enginId}`,
+        DELETE_ENGIN: (enginId) => `/engins/${enginId}`,
+        DOWNLOAD_ENGINS: "/engins/downloadexcel",
+    },
     IMAGE: {
         UPLOAD_IMAGE: "/auth/upload-image",
     },

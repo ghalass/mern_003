@@ -6,7 +6,9 @@ const prisma = require("./prismaClient");
 
 const authRoutes = require("./routes/authRoutes")
 const siteRoutes = require("./routes/siteRoutes")
+const enginRoutes = require("./routes/enginRoutes")
 const dashboardRoutes = require("./routes/dashboardRoutes")
+const saisiehrmRoutes = require('./routes/saisiehrm');
 
 const app = express()
 
@@ -36,9 +38,12 @@ app.use(async (req, res, next) => {
 
 
 // routes
+app.use('/dashboard', dashboardRoutes)
 app.use('/auth', authRoutes)
 app.use('/sites', siteRoutes)
-app.use('/dashboard', dashboardRoutes)
+app.use('/engins', enginRoutes)
+app.use('/engins', enginRoutes)
+app.use('/saisiehrm', saisiehrmRoutes)
 
 // Server uploads folder
 app.use('/uploads', express.static(path.join(__dirname, "uploads")))
