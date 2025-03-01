@@ -48,3 +48,21 @@ export const isTokenExpired = (token) => {
         return true; // Si erreur, considérer comme expiré
     }
 };
+
+export const downloadExcel = (data) => {
+    // Convert response to blob
+    const blob = new Blob([data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "sites_list.xlsx"; // File name
+    document.body.appendChild(a);
+    a.click();
+
+    // Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}

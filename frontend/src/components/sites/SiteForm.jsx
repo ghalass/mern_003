@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
-import { BsKey, BsPerson, BsExclamationCircle } from "react-icons/bs";
+import { BsExclamationCircle } from "react-icons/bs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "react-hot-toast";
 import { useCrudStore } from "../../store/crudStore";
-import { LuPlus, LuX } from "react-icons/lu";
+import { LuPin, LuPlus, LuX } from "react-icons/lu";
+import InputForm from "../commun/InputForm";
+import AddOrCancelBtn from "../commun/AddOrCancelBtn";
 
 const SiteForm = () => {
   const selectedItem = useCrudStore((state) => state.selectedItem);
@@ -105,44 +107,18 @@ const SiteForm = () => {
       <div className="card-body">
         <div className="d-flex justify-content-between mb-1">
           <h6>Gestion d'un site</h6>
-
-          <div className="d-flex gap-1">
-            <button
-              onClick={() => {
-                setSelectedItem(null);
-                setOp("add");
-              }}
-              className="btn btn-sm btn-outline-success rounded-pill pb-1 pt-0 px-2"
-            >
-              <LuPlus />
-            </button>
-            <button
-              onClick={() => {
-                setSelectedItem(null);
-                setOp(null);
-              }}
-              className="btn btn-sm btn-outline-danger rounded-pill pb-1 pt-0 px-2"
-            >
-              <LuX />
-            </button>
-          </div>
+          <AddOrCancelBtn />
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="form-floating mb-2">
-            <input
-              type="text"
-              className={`form-control`}
-              id="name"
-              placeholder="Nom du site"
-              value={name}
-              onChange={({ target }) => setName(target.value)}
-            />
-            <label htmlFor="naemailme">
-              <BsPerson className="me-1" />
-              Nom du site
-            </label>
-          </div>
+          <InputForm
+            id={"name"}
+            placeholder={"Nom du site"}
+            value={name}
+            onChange={({ target }) => setName(target.value)}
+            label={"Nom du site"}
+            icon={<LuPin className="me-1" />}
+          />
 
           <button
             disabled={mutation.isPending}
@@ -157,7 +133,7 @@ const SiteForm = () => {
                   aria-hidden="true"
                 ></span>
               )}
-              {mutation.isPending ? "Processing..." : `${btnSubmit.text}`}
+              {mutation.isPending ? "Traitement..." : `${btnSubmit.text}`}
             </div>
           </button>
 

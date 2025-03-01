@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { LuTrash2, LuPencil, LuPlus, LuDownload } from "react-icons/lu";
+import { LuDownload } from "react-icons/lu";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
-import { useCrudStore } from "../../store/crudStore";
+import toast from "react-hot-toast";
+import { downloadExcel } from "../../utils/helpers";
+import SiteList from "./SiteList";
+import Pagination from "../commun/Pagination";
 
 const SitesList = () => {
-  const setSelectedItem = useCrudStore((state) => state.setSelectedItem);
-  const setOp = useCrudStore((state) => state.setOp);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const getAll = async () => {
     const response = await axiosInstance.get(API_PATHS.SITES.GET_ALL_SITES);
@@ -20,6 +20,7 @@ const SitesList = () => {
 
   const {
     isLoading,
+    isPending,
     error,
     data: sites = [],
     isError,
@@ -36,21 +37,7 @@ const SitesList = () => {
         responseType: "blob", // Ensure response is a binary file
       });
 
-      // Convert response to blob
-      const blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "sites_list.xlsx"; // File name
-      document.body.appendChild(a);
-      a.click();
-
-      // Cleanup
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      downloadExcel(response.data);
     } catch (error) {
       console.error("Error downloading file:", error);
     }
@@ -59,12 +46,16 @@ const SitesList = () => {
   // Mutations;
   const mutation = useMutation({
     mutationFn: upload,
-    onSuccess: () => {},
+    onSuccess: () => {
+      toast.success("Téléchargé avec succès.");
+    },
   });
 
   // Filtered sites based on search term
-  const filteredSites = sites.filter((site) =>
-    site.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSites = sites.filter(
+    (site) =>
+      site.id.toString().includes(searchTerm.toLowerCase()) ||
+      site.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Pagination logic
@@ -78,7 +69,10 @@ const SitesList = () => {
     <div className="card">
       <div className="card-body">
         <div className="d-flex justify-content-between mb-1">
-          <h6>Liste des sites ({filteredSites.length})</h6>
+          <h6>
+            Liste des sites ({filteredSites.length})
+            {isPending && "Chargement..."}
+          </h6>
 
           <button
             disabled={mutation.isPending}
@@ -99,54 +93,25 @@ const SitesList = () => {
         </div>
 
         {/* Search Bar */}
-        <input
-          type="search"
-          className="form-control mb-3"
-          placeholder="Rechercher un site..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
 
-        <table className="table table-sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Site</th>
-              <th className="text-end">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedSites.map((site, index) => (
-              <tr key={index}>
-                <td>{site.id}</td>
-                <td>{site.name}</td>
-                <td>
-                  <div className="d-flex justify-content-end gap-1">
-                    <button
-                      onClick={() => {
-                        setSelectedItem(site);
-                        setOp("update");
-                      }}
-                      className="btn btn-sm btn-outline-success rounded-pill pb-1 pt-0 px-2"
-                    >
-                      <LuPencil />
-                    </button>
+        <div className="d-flex gap-1 justify-content-between">
+          <input
+            type="search"
+            className="form-control mb-3"
+            placeholder="Rechercher un site..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
 
-                    <button
-                      onClick={() => {
-                        setSelectedItem(site);
-                        setOp("delete");
-                      }}
-                      className="btn btn-sm btn-outline-danger rounded-pill pb-1 pt-0 px-2"
-                    >
-                      <LuTrash2 />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          <input
+            type="number"
+            className="form-control mb-3 w-25"
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(e.target.value)}
+          />
+        </div>
+
+        <SiteList paginatedSites={paginatedSites} />
 
         {isLoading && <div className="text-center">Chargement...</div>}
         {!isLoading && !isError && filteredSites.length === 0 && (
@@ -155,25 +120,11 @@ const SitesList = () => {
         {isError && error && <Error error={error.message} />}
 
         {/* Pagination Controls */}
-        <div className="d-flex justify-content-between mt-3">
-          <button
-            className="btn btn-sm btn-outline-primary"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => prev - 1)}
-          >
-            Précédent
-          </button>
-          <span>
-            Page {currentPage} sur {totalPages}
-          </span>
-          <button
-            className="btn btn-sm btn-outline-primary"
-            disabled={currentPage === totalPages || totalPages === 0}
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-          >
-            Suivant
-          </button>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );
