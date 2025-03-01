@@ -14,11 +14,11 @@ const Sites = () => {
         <AdminLayout />
 
         <div className="row">
-          <div className="mt-2 col-sm-12 col-md-4 ">
+          <div className="mt-1 col-sm-12 col-md-4 ">
             <SiteForm />
           </div>
 
-          <div className="mt-2 col-sm-12 col-md-8 ">
+          <div className="mt-1 col-sm-12 col-md-8 ">
             <SitesList />
           </div>
         </div>

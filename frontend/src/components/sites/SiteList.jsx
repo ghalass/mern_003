@@ -8,7 +8,7 @@ const SiteList = ({ paginatedSites }) => {
 
   return (
     <>
-      <table className="table table-sm">
+      <table className="table table-sm table-hover">
         <thead>
           <tr>
             <th>#</th>

@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "react-hot-toast";
 import { useCrudStore } from "../../store/crudStore";
-import { LuPin, LuPlus, LuX } from "react-icons/lu";
+import { LuPencilLine, LuPin, LuPlus, LuTrash2 } from "react-icons/lu";
 import InputForm from "../commun/InputForm";
 import AddOrCancelBtn from "../commun/AddOrCancelBtn";
 
@@ -23,22 +23,34 @@ const SiteForm = () => {
   const [btnSubmit, setBtnSubmit] = useState({
     text: "Ajouter",
     cls: "primary",
-    icon: "",
+    icon: <LuPlus />,
   });
 
   useEffect(() => {
     setName(selectedItem?.name ?? "");
     switch (op) {
       case "add":
-        setBtnSubmit({ text: "Créer", cls: "primary" });
+        setBtnSubmit({
+          text: "Créer",
+          cls: "primary",
+          icon: <LuPlus className="me-1" />,
+        });
         break;
 
       case "update":
-        setBtnSubmit({ text: "Mofifier", cls: "success" });
+        setBtnSubmit({
+          text: "Mofifier",
+          cls: "success",
+          icon: <LuPencilLine className="me-1" />,
+        });
         break;
 
       case "delete":
-        setBtnSubmit({ text: "Supprimer", cls: "danger" });
+        setBtnSubmit({
+          text: "Supprimer",
+          cls: "danger",
+          icon: <LuTrash2 className="me-1" />,
+        });
         break;
 
       default:
@@ -133,7 +145,8 @@ const SiteForm = () => {
                   aria-hidden="true"
                 ></span>
               )}
-              {mutation.isPending ? "Traitement..." : `${btnSubmit.text}`}
+              {btnSubmit.icon}
+              {mutation.isPending ? "Traitement..." : ` ${btnSubmit.text}`}
             </div>
           </button>
 
