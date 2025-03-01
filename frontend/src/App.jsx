@@ -16,12 +16,18 @@ import Loader from "./components/Loader";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Home";
+
+// ADMIN
 import Index from "./pages/Admin/Index";
 import Profile from "./pages/Profile/Profile";
 import Sites from "./pages/Admin/Sites";
 import Typeparcs from "./pages/Admin/Typeparcs";
 import Parcs from "./pages/Admin/Parcs";
 import Engins from "./pages/Admin/Engins";
+
+// PERFORMANCES
+import IndexPerformance from "./pages/Performances/IndexPerformance";
+import SaisieRJE from "./pages/Performances/SaisieRJE";
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -44,6 +50,10 @@ const App = () => {
           <Route path="/admin/typeparcs" element={<Typeparcs />} />
           <Route path="/admin/parcs" element={<Parcs />} />
           <Route path="/admin/engins" element={<Engins />} />
+
+          {/* ADMIN ROUTES */}
+          <Route path="/performances" element={<IndexPerformance />} />
+          <Route path="/performances/saisierje" element={<SaisieRJE />} />
         </Routes>
         {/* </LoadingWrapper> */}
       </Router>

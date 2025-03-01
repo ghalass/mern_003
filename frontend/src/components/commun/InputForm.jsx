@@ -8,18 +8,20 @@ const InputForm = ({
   onChange,
   label,
   icon,
+  disabled = false,
 }) => {
   return (
     <div className="form-floating mb-2">
       <input
         type={type}
         className={`form-control`}
-        id={id}
+        id={`FormInput-${id}`}
         placeholder={placeholder}
+        disabled={disabled}
         value={value}
         onChange={onChange}
       />
-      <label htmlFor={type}>
+      <label htmlFor={`FormInput-${id}`}>
         {icon}
         {label}
       </label>
