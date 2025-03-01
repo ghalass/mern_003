@@ -5,15 +5,23 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+
+import { UserContext } from "./context/UserContext";
+import { isTokenExpired } from "./utils/helpers";
+
+// components
+import Loader from "./components/Loader";
+
+// pages
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Home";
-import { UserContext } from "./context/UserContext";
 import Index from "./pages/Admin/Index";
 import Profile from "./pages/Profile/Profile";
 import Sites from "./pages/Admin/Sites";
-import { isTokenExpired } from "./utils/helpers";
-import Loader from "./components/Loader";
+import Typeparcs from "./pages/Admin/Typeparcs";
+import Parcs from "./pages/Admin/Parcs";
+import Engins from "./pages/Admin/Engins";
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -21,18 +29,23 @@ const App = () => {
   return (
     <div>
       <Router>
-        <LoadingWrapper setLoading={setLoading}>
-          {loading && <Loader />}
-          <AuthChecker />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin" element={<Index />} />
-            <Route path="/admin/sites" element={<Sites />} />
-          </Routes>
-        </LoadingWrapper>
+        {/* <LoadingWrapper setLoading={setLoading}> */}
+        {loading && <Loader />}
+        <AuthChecker />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile" element={<Profile />} />
+
+          {/* ADMIN ROUTES */}
+          <Route path="/admin" element={<Index />} />
+          <Route path="/admin/sites" element={<Sites />} />
+          <Route path="/admin/typeparcs" element={<Typeparcs />} />
+          <Route path="/admin/parcs" element={<Parcs />} />
+          <Route path="/admin/engins" element={<Engins />} />
+        </Routes>
+        {/* </LoadingWrapper> */}
       </Router>
     </div>
   );
@@ -73,7 +86,7 @@ const LoadingWrapper = ({ children, setLoading }) => {
 
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 500); // Simulate loading delay
+    const timer = setTimeout(() => setLoading(false), 0); // Simulate loading delay
 
     return () => clearTimeout(timer);
   }, [location.pathname]);

@@ -5,7 +5,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
 import { downloadExcel } from "../../utils/helpers";
-import SiteList from "./SiteList";
+import SiteTable from "./SiteTable";
 import Pagination from "../commun/Pagination";
 
 const SitesList = () => {
@@ -69,10 +69,7 @@ const SitesList = () => {
     <div className="card">
       <div className="card-body">
         <div className="d-flex justify-content-between mb-1">
-          <h6>
-            Liste des sites ({filteredSites.length})
-            {isPending && "Chargement..."}
-          </h6>
+          <h6>Liste des sites ({filteredSites.length})</h6>
 
           <button
             disabled={mutation.isPending}
@@ -111,7 +108,7 @@ const SitesList = () => {
           />
         </div>
 
-        <SiteList paginatedSites={paginatedSites} />
+        <SiteTable paginatedSites={paginatedSites} />
 
         {isLoading && <div className="text-center">Chargement...</div>}
         {!isLoading && !isError && filteredSites.length === 0 && (

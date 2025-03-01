@@ -2,7 +2,7 @@ import React from "react";
 import { useCrudStore } from "../../store/crudStore";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 
-const SiteList = ({ paginatedSites }) => {
+const SiteTable = ({ paginatedSites }) => {
   const setSelectedItem = useCrudStore((state) => state.setSelectedItem);
   const setOp = useCrudStore((state) => state.setOp);
 
@@ -52,4 +52,4 @@ const SiteList = ({ paginatedSites }) => {
   );
 };
 
-export default SiteList;
+export default SiteTable;
