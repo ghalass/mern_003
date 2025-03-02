@@ -8,7 +8,7 @@ const SaisieRJE = () => {
   return (
     <div>
       <DefaultLayout />
-      <div className="container-lg">
+      <div className="container-fluid">
         <PerformancesLayout />
 
         <div className="row">

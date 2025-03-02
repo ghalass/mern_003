@@ -9,6 +9,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import toast from "react-hot-toast";
 
+import { LuLayoutDashboard } from "react-icons/lu";
+
 function Header() {
   const { user, clearUser } = useContext(UserContext);
 
@@ -39,8 +41,10 @@ function Header() {
             to="/"
             className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
           >
-            <i className="bi bi-columns-gap  text-primary me-2"></i>
-            APP
+            <div className="d-flex align-items-center">
+              <LuLayoutDashboard className="text-primary me-1" />
+              <span>APP</span>
+            </div>
           </Nav.Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

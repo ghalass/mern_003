@@ -6,7 +6,7 @@ const Typeparcs = () => {
   return (
     <div>
       <DefaultLayout />
-      <div className="container-lg">
+      <div className="container-fluid">
         <AdminLayout />
 
         <div className="row">

@@ -7,6 +7,7 @@ const prisma = require("./prismaClient");
 const authRoutes = require("./routes/authRoutes")
 const siteRoutes = require("./routes/siteRoutes")
 const enginRoutes = require("./routes/enginRoutes")
+const panneRoutes = require("./routes/panneRoutes")
 const dashboardRoutes = require("./routes/dashboardRoutes")
 const saisiehrmRoutes = require('./routes/saisiehrm');
 
@@ -43,6 +44,7 @@ app.use('/auth', authRoutes)
 app.use('/sites', siteRoutes)
 app.use('/engins', enginRoutes)
 app.use('/engins', enginRoutes)
+app.use('/pannes', panneRoutes)
 app.use('/saisiehrm', saisiehrmRoutes)
 
 // Server uploads folder

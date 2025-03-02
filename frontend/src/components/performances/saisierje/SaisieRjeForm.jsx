@@ -40,13 +40,15 @@ const SaisieRjeForm = () => {
 
   useEffect(() => {
     getSaisieHrm();
-  }, [selectedEngin, du]);
+  }, [selectedEngin, du, selectedSite]);
 
   const getSaisieHrm = () => {
-    const data = { du, enginId: selectedEngin };
-    if (du && selectedEngin) {
-      setSelectedItem(data);
-    }
+    const data = { du, enginId: selectedEngin, siteId: selectedSite };
+    console.log(data);
+
+    // if (du && selectedEngin) {
+    setSelectedItem(data);
+    // }
   };
 
   return (
@@ -67,7 +69,7 @@ const SaisieRjeForm = () => {
           label="date"
         />
 
-        {/* <FormSelect
+        <FormSelect
           id="siteId"
           disabled={sitesIsLoading}
           title="Choisir un site"
@@ -75,7 +77,7 @@ const SaisieRjeForm = () => {
           options={sites}
           value={selectedSite}
           onChange={({ target }) => setSelectedSite(target.value)}
-        /> */}
+        />
 
         {/* <FormSelect
           id="parcId"
