@@ -7,6 +7,7 @@ import InputForm from "../../commun/InputForm";
 import FormSelect from "../../commun/FormSelect";
 import { BsExclamationCircle } from "react-icons/bs";
 import { LuTrash2 } from "react-icons/lu";
+import toast from "react-hot-toast";
 
 const SaisieRjeList = () => {
   const [hrmError, setHrmError] = useState(null);
@@ -76,22 +77,33 @@ const SaisieRjeList = () => {
     switch (fun) {
       case "saiseHRM":
         if (saisierje && saisierje.length > 0 && saisierje[0]) {
+          // update saiseHRM
           const data = {
             id: saisierje[0]?.id,
-            du: saisierje[0]?.du,
-            enginId: saisierje[0]?.enginId,
-            siteId: saisierje[0]?.siteId,
+            // du: saisierje[0]?.du,
+            // enginId: saisierje[0]?.enginId,
+            // siteId: saisierje[0]?.siteId,
             hrm: hrm,
           };
-          console.log("update saiseHRM", data);
+          // console.log("update saiseHRM", data);
+          // CALL API ==> ADD PANNE HIM
+          const res = await axiosInstance.put(
+            API_PATHS.SAISIE_RJE.UPDATE_SAISIE_RJE_HRM(data?.id),
+            data
+          );
+          console.log(res);
         } else {
+          // add saiseHRM
           const data = {
             du: selectedItem?.du,
             enginId: selectedItem?.enginId,
             siteId: selectedItem?.siteId,
             hrm: hrm,
           };
-          console.log("add saiseHRM", data);
+          await axiosInstance.post(
+            API_PATHS.SAISIE_RJE.ADD_SAISIE_RJE_HRM,
+            data
+          );
         }
         break;
       case "saiseHIM":
@@ -135,38 +147,43 @@ const SaisieRjeList = () => {
         throw new Error("Invalid mutation typeOp");
     }
   };
-  // Mutations;
-  // const queryClient = useQueryClient();
-  // const mutation = useMutation({
-  //   mutationFn: dynamicMutation,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["saisierjeList"] });
-  //   },
-  //   onError: (err) => {
-  //     setPanneError(err?.response?.data?.error);
-  //   },
-  // });
-
   // Mutation for HRM
   const queryClient = useQueryClient();
   const hrmMutation = useMutation({
     mutationFn: () => dynamicMutation({ fun: "saiseHRM" }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["saisierjeList"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["saisierjeList"] });
+      if (!hrmError) {
+        toast.success("HRM sauvegardé avec succès.");
+      }
+    },
+
     onError: (err) => setHrmError(err?.response?.data?.error),
   });
   // Mutation for HIM
   const himMutation = useMutation({
     mutationFn: () => dynamicMutation({ fun: "saiseHIM" }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["saisierjeList"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["saisierjeList"] });
+      if (!panneError) {
+        setHim("");
+        setNi("");
+        toast.success("Panne ajoutée avec succès.");
+      }
+    },
     onError: (err) => setPanneError(err?.response?.data?.error),
   });
   // Mutation for deleting panne
   const deleteMutation = useMutation({
     mutationFn: (item) => dynamicMutation({ fun: "deletePanne", info: item }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["saisierjeList"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["saisierjeList"] });
+      if (!panneError) {
+        setHim("");
+        setNi("");
+        toast.success("Panne supprimée avec succès.");
+      }
+    },
     onError: (err) => setPanneError(err?.response?.data?.error),
   });
 
@@ -175,6 +192,9 @@ const SaisieRjeList = () => {
     setPanneError("");
   }, [selectedItem]);
 
+  // Check if any mutation is pending
+  const isAnyPending =
+    hrmMutation.isPending || himMutation.isPending || deleteMutation.isPending;
   return (
     <div className="row">
       <div className="col-sm-12 col-md-4 ">
@@ -195,11 +215,7 @@ const SaisieRjeList = () => {
               onClick={() => hrmMutation.mutate()}
               type="submit"
               className={`btn btn-sm btn-outline-success mt-2 w-100`}
-              disabled={
-                deleteMutation.isPending ||
-                himMutation.isPending ||
-                hrmMutation.isPending
-              }
+              disabled={isAnyPending}
             >
               {hrmMutation.isPending && (
                 <span
@@ -224,8 +240,6 @@ const SaisieRjeList = () => {
                 </div>
               )}
             </div>
-
-            <hr />
 
             <FormSelect
               id="panneId"
@@ -259,7 +273,7 @@ const SaisieRjeList = () => {
             </div>
 
             <button
-              disabled={himMutation.isPending}
+              disabled={isAnyPending}
               // onClick={() => mutation.mutate({ fun: "saiseHIM" })}
               onClick={() => himMutation.mutate()}
               type="submit"

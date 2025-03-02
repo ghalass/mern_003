@@ -44,20 +44,16 @@ const SaisieRjeForm = () => {
 
   const getSaisieHrm = () => {
     const data = { du, enginId: selectedEngin, siteId: selectedSite };
-    console.log(data);
-
-    // if (du && selectedEngin) {
     setSelectedItem(data);
-    // }
   };
 
   return (
     <div className="card">
       <div className="card-body">
-        <div className="d-flex justify-content-between mb-1">
+        {/* <div className="d-flex justify-content-between mb-1">
           <h6>Gestion d'un site</h6>
           <AddOrCancelBtn />
-        </div>
+        </div> */}
 
         <InputForm
           type="date"

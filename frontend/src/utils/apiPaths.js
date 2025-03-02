@@ -36,8 +36,11 @@ export const API_PATHS = {
     },
     SAISIE_RJE: {
         GET_SAISIE_RJE: "/saisiehrm/getSaisieHrm",
+
         ADD_SAISIE_RJE_PANNE_HIM: "/saisiehrm/addPanneHim",
         DELETE_SAISIE_RJE_PANNE_HIM: (saisiehimId) => `/saisiehrm/deletePanneHim/${saisiehimId}`,
 
+        UPDATE_SAISIE_RJE_HRM: (saisiehrmId) => `/saisiehrm/${saisiehrmId}`,
+        ADD_SAISIE_RJE_HRM: `/saisiehrm/`,
     },
 };
